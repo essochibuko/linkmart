@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkMart - Modern Product Marketplace</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="./style2.css">
+    <link rel="stylesheet" href="./script2.js">
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="brand-logo" onclick="switchTab('home')">
+                <i class="fa-solid fa-store"></i>
+                <span>Link<strong>Mart</strong></span>
+            </a>
+
+            <div class="nav-links" id="navLinks">
+                <button class="nav-item active" data-tab="home" onclick="switchTab('home')">
+                    <i class="fa-solid fa-house"></i> Home
+                </button>
+                <button class="nav-item" data-tab="explore" onclick="switchTab('explore')">
+                    <i class="fa-solid fa-compass"></i> Explore Products
+                </button>
+                <button class="nav-item add-btn-highlight" data-tab="add" onclick="switchTab('add')">
+                    <i class="fa-solid fa-plus-circle"></i> Add Product
+                </button>
+                <button class="nav-item" data-tab="about" onclick="switchTab('about')">
+                    <i class="fa-solid fa-circle-info"></i> About
+                </button>
+                <button class="nav-item admin-btn" onclick="openAdminModal()">
+                    <i class="fa-solid fa-user-shield"></i> Admin
+                </button>
+            </div>
+
+            <button class="mobile-menu-toggle" id="menuToggle" onclick="toggleMobileMenu()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container Viewports -->
+    <main class="main-content">
+
+        <!-- 1. HOME TAB -->
+        <section id="tab-home" class="tab-page active">
+            <!-- Hero Section -->
+            <div class="hero">
+                <div class="hero-badge"><i class="fa-solid fa-bolt"></i> Ultimate Product Discovery</div>
+                <h1>Discover & Share Amazing Products Across the Web</h1>
+                <p>Paste any product link from top online stores. Curate your favorite finds, showcase digital tools, and share link recommendations with the community.</p>
+                <div class="hero-actions">
+                    <button class="btn btn-primary btn-lg" onclick="switchTab('explore')">
+                        <i class="fa-solid fa-magnifying-glass"></i> Explore Products
+                    </button>
+                    <button class="btn btn-secondary btn-lg" onclick="switchTab('add')">
+                        <i class="fa-solid fa-link"></i> Add a Product Link
+                    </button>
+                </div>
+            </div>
+
+            <!-- Featured Section -->
+            <div class="section-header">
+                <h2><i class="fa-solid fa-star"></i> Featured Products</h2>
+                <a href="#" class="view-all-link" onclick="switchTab('explore')">View All <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="product-grid" id="featuredGrid">
+                <!-- Injected dynamically via JS -->
+            </div>
+
+            <!-- Recent Submissions -->
+            <div class="section-header" style="margin-top: 3rem;">
+                <h2><i class="fa-solid fa-clock"></i> Recently Added</h2>
+            </div>
+            <div class="product-grid" id="recentGrid">
+                <!-- Injected dynamically via JS -->
+            </div>
+        </section>
+
+        <!-- 2. EXPLORE TAB -->
+        <section id="tab-explore" class="tab-page">
+            <div class="explore-header">
+                <h1>Explore Marketplace</h1>
+                <p>Search through thousands of shared product links and filter by category.</p>
+                
+                <!-- Search & Filters -->
+                <div class="search-filter-box">
+                    <div class="search-bar">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="searchInput" placeholder="Search by name, tags, or description..." oninput="filterProducts()">
+                        <button class="clear-search" onclick="clearSearch()"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    
+                    <div class="filter-controls">
+                        <select id="sortSelect" onchange="filterProducts()" class="custom-select">
+                            <option value="newest">Sort by: Newest</option>
+                            <option value="popular">Sort by: Most Liked</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Category Pills -->
+                <div class="category-pills" id="categoryPills">
+                    <button class="pill active" onclick="setCategoryFilter('All', this)">All</button>
+                    <button class="pill" onclick="setCategoryFilter('Electronics', this)"><i class="fa-solid fa-laptop"></i> Electronics</button>
+                    <button class="pill" onclick="setCategoryFilter('Fashion', this)"><i class="fa-solid fa-shirt"></i> Fashion</button>
+                    <button class="pill" onclick="setCategoryFilter('Beauty & Personal Care', this)"><i class="fa-solid fa-pump-soap"></i> Beauty & Care</button>
+                    <button class="pill" onclick="setCategoryFilter('Home & Living', this)"><i class="fa-solid fa-house-laptop"></i> Home & Living</button>
+                    <button class="pill" onclick="setCategoryFilter('Software & Digital', this)"><i class="fa-solid fa-code"></i> Software & Digital</button>
+                    <button class="pill" onclick="setCategoryFilter('Art & Design', this)"><i class="fa-solid fa-palette"></i> Art & Design</button>
+                    <button class="pill" onclick="setCategoryFilter('Education', this)"><i class="fa-solid fa-book-open"></i> Education</button>
+                    <button class="pill" onclick="setCategoryFilter('Other Products', this)"><i class="fa-solid fa-box"></i> Other</button>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="product-grid" id="exploreGrid">
+                <!-- Injected dynamically via JS -->
+            </div>
+            
+            <div id="noResults" class="no-results hidden">
+                <i class="fa-solid fa-box-open"></i>
+                <h3>No Products Found</h3>
+                <p>Try adjusting your search terms or category selection.</p>
+            </div>
+        </section>
+
+        <!-- 3. ADD PRODUCTS TAB -->
+        <section id="tab-add" class="tab-page">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2><i class="fa-solid fa-link"></i> Share a Product Link</h2>
+                    <p>Paste a product link below to automatically generate a product listing for the community.</p>
+                </div>
+
+                <form id="addProductForm" onsubmit="handleFormSubmit(event)">
+                    
+                    <!-- URL Input & Auto Fetcher -->
+                    <div class="form-group">
+                        <label for="productUrl">Product Link (URL) <span class="required">*</span></label>
+                        <div class="url-input-wrapper">
+                            <i class="fa-solid fa-globe"></i>
+                            <input type="url" id="productUrl" placeholder="https://example.com/product-page" required onchange="autoFetchMetadata()">
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="autoFetchMetadata()">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Fetch
+                            </button>
+                        </div>
+                        <small class="help-text">Paste a full HTTPS link from any store or website.</small>
+                    </div>
+
+                    <!-- Notification Banner for Auto Fetch -->
+                    <div id="fetchStatus" class="status-banner hidden"></div>
+
+                    <!-- Product Name -->
+                    <div class="form-group">
+                        <label for="productTitle">Product Name <span class="required">*</span></label>
+                        <input type="text" id="productTitle" placeholder="e.g. Ergonomic Wireless Mouse" required oninput="updateLivePreview()">
+                    </div>
+
+                    <!-- Category & Price Row -->
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="productCategory">Category <span class="required">*</span></label>
+                            <select id="productCategory" required onchange="updateLivePreview()">
+                                <option value="">Select a Category</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Fashion">Fashion</option>
+                                <option value="Beauty & Personal Care">Beauty & Personal Care</option>
+                                <option value="Home & Living">Home & Living</option>
+                                <option value="Software & Digital">Software & Digital Products</option>
+                                <option value="Art & Design">Art & Design</option>
+                                <option value="Education">Education</option>
+                                <option value="Other Products">Other Products</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group half">
+                            <label for="productPrice">Price ($USD) <span class="optional">(Optional)</span></label>
+                            <input type="number" id="productPrice" step="0.01" min="0" placeholder="e.g. 49.99" oninput="updateLivePreview()">
+                        </div>
+                    </div>
+
+                    <!-- Image URL -->
+                    <div class="form-group">
+                        <label for="productImage">Product Image URL <span class="optional">(Optional)</span></label>
+                        <input type="url" id="productImage" placeholder="https://images.unsplash.com/photo-..." oninput="updateLivePreview()">
+                        <small class="help-text">Direct URL to product photograph. Leave blank for default category image.</small>
+                    </div>
+
+                    <!-- Short Description -->
+                    <div class="form-group">
+                        <label for="productDesc">Product Description <span class="required">*</span></label>
+                        <textarea id="productDesc" rows="4" placeholder="Briefly describe what makes this product great..." required oninput="updateLivePreview()"></textarea>
+                    </div>
+
+                    <!-- Live Preview Card Section -->
+                    <div class="preview-section">
+                        <h4><i class="fa-solid fa-eye"></i> Live Listing Preview</h4>
+                        <div class="preview-card-wrapper">
+                            <div class="product-card" id="livePreviewCard">
+                                <div class="card-image-wrap">
+                                    <img id="prevImg" src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=600&auto=format&fit=crop&q=80" alt="Preview">
+                                    <span id="prevBadge" class="card-badge">Electronics</span>
+                                </div>
+                                <div class="card-body">
+                                    <h3 id="prevTitle">Product Name Preview</h3>
+                                    <p id="prevDesc" class="card-desc">Your product description will appear here as you type into the form fields above.</p>
+                                    <div class="card-footer">
+                                        <div id="prevPrice" class="card-price">$0.00</div>
+                                        <div class="card-btn-group">
+                                            <span class="btn btn-outline btn-sm"><i class="fa-solid fa-up-right-from-square"></i> Visit Link</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Actions -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">
+                            <i class="fa-solid fa-paper-plane"></i> Publish Product Link
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- 4. ABOUT TAB -->
+        <section id="tab-about" class="tab-page">
+            <div class="about-container">
+                <div class="about-card">
+                    <h2><i class="fa-solid fa-store"></i> About LinkMart</h2>
+                    <p class="lead">LinkMart is a modern product curation platform built for sharing, discovering, and discussing products from across the internet.</p>
+
+                    <div class="info-grid">
+                        <div class="info-box">
+                            <i class="fa-solid fa-share-nodes"></i>
+                            <h3>Link Curation</h3>
+                            <p>Paste any URL from online stores, marketplaces, or independent shops to create structured showcase listings.</p>
+                        </div>
+
+                        <div class="info-box">
+                            <i class="fa-solid fa-comments"></i>
+                            <h3>Community Feedback</h3>
+                            <p>Upvote products, join discussions, leave comments, and discover honest community impressions.</p>
+                        </div>
+
+                        <div class="info-box">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <h3>Safe & Transparent</h3>
+                            <p>All links are sanitized HTTPS URLs. LinkMart directly routes buyers to external vendors without hidden markups.</p>
+                        </div>
+                    </div>
+
+                    <!-- Backend Notice Section -->
+                    <div class="tech-notice">
+                        <h3><i class="fa-solid fa-database"></i> Client-Side Storage & Backend Architecture Notice</h3>
+                        <p>This front-end application utilizes <strong>browser localStorage</strong> for instant demonstration of product adding, upvoting, commenting, and administration.</p>
+                        <ul>
+                            <li><strong>Local Browser Scope:</strong> Items added on this device are saved in your current web browser cache.</li>
+                            <li><strong>Production Backend Requirements:</strong> For public multi-user deployment across devices, connect this frontend to a RESTful API with a database (e.g., PostgreSQL, MongoDB, or Firebase) and backend server validation.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PRODUCT DETAIL & COMMENT MODAL -->
+    <div id="productModal" class="modal-backdrop hidden">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProductModal()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-body" id="modalProductDetails">
+                <!-- Injected via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN MODAL -->
+    <div id="adminModal" class="modal-backdrop hidden">
+        <div class="modal-content modal-md">
+            <button class="modal-close" onclick="closeAdminModal()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="admin-box">
+                <h2><i class="fa-solid fa-user-shield"></i> Marketplace Admin</h2>
+                <div id="adminLoginForm" class="admin-login">
+                    <p>Enter the administrator password to manage listings and reports.</p>
+                    <div class="form-group">
+                        <input type="password" id="adminPassInput" placeholder="Password (default: admin123)">
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="loginAdmin()">Login to Admin Panel</button>
+                </div>
+
+                <div id="adminDashboard" class="admin-dashboard hidden">
+                    <div class="admin-metrics">
+                        <div class="metric"><span id="totalProductsCount">0</span> Products</div>
+                        <div class="metric"><span id="totalReportsCount">0</span> Reported Items</div>
+                    </div>
+                    
+                    <h3>Managed Products</h3>
+                    <div class="admin-table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Category</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminProductsTable">
+                                <!-- Injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="admin-actions-bar">
+                        <button class="btn btn-outline btn-sm" onclick="resetToDefaultData()"><i class="fa-solid fa-rotate-left"></i> Reset to Sample Data</button>
+                        <button class="btn btn-secondary btn-sm" onclick="logoutAdmin()">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="#" class="brand-logo"><i class="fa-solid fa-store"></i> Link<strong>Mart</strong></a>
+                <p>The modern link marketplace for discoverable products.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#" onclick="switchTab('home')">Home</a>
+                <a href="#" onclick="switchTab('explore')">Explore</a>
+                <a href="#" onclick="switchTab('add')">Add Product</a>
+                <a href="#" onclick="switchTab('about')">About</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 LinkMart Marketplace. Built for speed, responsiveness, and seamless sharing.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- Main JavaScript File -->
+    <script src="script2.js"></script>
+</body>
+</html>
